@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FBTarjetaa.Models
 {
-    public class TarjetaCredito
+    public class TarjetaCredito //campos necesarios para la BD
     {
 
         public int Id { get; set; }

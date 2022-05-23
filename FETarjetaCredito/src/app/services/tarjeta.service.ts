@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TarjetaService {
- private myAppUrl = 'https://localhost:44353/';
+ private myAppUrl = 'https://localhost:44353/'; //URL de la app que fue creada en NET Core.
  private myApiUrl = 'api/tarjeta/';
 
   constructor(private http: HttpClient) {}

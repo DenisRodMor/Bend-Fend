@@ -13,7 +13,7 @@
             <div class="col-lg-6">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="titulo">{{accion | uppercase}} TARJETA</h5>
+                    <h5 class="titulo">{{accion | uppercase}} TARJETA</h5> <!--Para que el titulo cambie dependiendo de que accion tenga, si agrega o actualiza-->
 
                       <form [formGroup]="form" (ngSubmit)="guardarTarjeta()">
                         <div class="input-group input-group-lg mb-3">

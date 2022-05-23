@@ -11,31 +11,31 @@ using FBTarjetaa.Models;
 
 namespace FBTarjeta.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TarjetaController : ControllerBase
+    [Route("api/[controller]")] //atributo se puede aplicar a una clase de controlador para habilitar los siguientes comportamientos
+    [ApiController] //obstinados y específicos de la API: Requisito de enrutamiento de atributos. Respuestas HTTP 400 automáticas.
+    public class TarjetaController : ControllerBase //agrega soporte para vistas, por lo que es para manejar páginas web, no solicitudes de API web
     {
-        private readonly AplicationDbContext _context;
-
+        private readonly AplicationDbContext _context; // el modificador readonly nos impide cambiar su valor
+                                                        // su valor es inmutable una vez finalizada la propia declaración del campo     
         public TarjetaController(AplicationDbContext context)
         {
 
-            _context = context;
-
+            _context = context; //DataContext “actúa como un proxy para la base de datos local”.
+                                //Y poder manejar los datos como objetos
         }
 
         // GET: api/<TarjetaController>
         [HttpGet]
-        public async Task<ActionResult> Get()
-        {
+        public async Task<ActionResult> Get() //Mostrar listado de tarjetas que hay en la DB
+        {                                   //ToListAsync devuelve una tarea
             try
             {
-                var listTarjetas = await _context.TarjetaCredito.ToListAsync();
-                return Ok(listTarjetas);
+                var listTarjetas = await _context.TarjetaCredito.ToListAsync(); //El comando await antes de una promesa hace que espere hasta que la accion responda.
+                return Ok(listTarjetas); //devuelve listadp
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message); //Bad Request indica que el servidor no puede o no procesará la petición debido a algo que es percibido como un error del cliente
             }
         }
 
@@ -45,9 +45,9 @@ namespace FBTarjeta.Controllers
         {
             try
             {
-                _context.Add(tarjeta);
-               await _context.SaveChangesAsync();
-                return Ok(tarjeta);
+                _context.Add(tarjeta); //agregar una nueva tarjeta a la BD
+               await _context.SaveChangesAsync(); //Espera para ejecutar la accion
+                return Ok(tarjeta); //devuelve listado con la nueva tarjeta
             }
             catch (Exception ex)
             {
@@ -61,17 +61,17 @@ namespace FBTarjeta.Controllers
         {
             try
             {
-                if(id != tarjeta.Id)
+                if(id != tarjeta.Id) //si id es diferente al Id de la tarjeta, devuelve un NotFound
                 {
                     return NotFound();
                 }
-                _context.Update(tarjeta);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "La tarjeta fue actualizada con exito!" });
+                _context.Update(tarjeta); // si es correcto, actualiza la tarjeta
+                await _context.SaveChangesAsync(); // espera y guarda cambios
+                return Ok(new { message = "La tarjeta fue actualizada con exito!" }); //si todo salio bien, mostrar mensaje positivo
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message); //Bad Request indica que el servidor no puede o no procesará la petición debido a algo que es percibido como un error del cliente
             }
         }
 
@@ -83,13 +83,13 @@ namespace FBTarjeta.Controllers
             {
                 var tarjeta = await _context.TarjetaCredito.FindAsync(id);
 
-                if(tarjeta == null )
+                if(tarjeta == null ) //Si tarjeta es igual a nulo, devuelve not found
                 {
                     return NotFound();
                 }
-                _context.TarjetaCredito.Remove(tarjeta);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "La tarjeta fue eliminada con exito!" });
+                _context.TarjetaCredito.Remove(tarjeta); //remover tarjeta de la BD
+                await _context.SaveChangesAsync(); //Espera y guarda cambios
+                return Ok(new { message = "La tarjeta fue eliminada con exito!" }); //si todo salio bien mostrar mensaje al usuario
             }
             catch (Exception ex)
             {

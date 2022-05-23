@@ -10,14 +10,14 @@ import { TarjetaService } from 'src/app/services/tarjeta.service';
 })
 export class TarjetaCreditoComponent implements OnInit {
 
-  listarTarjeta : any[] = [];
-  accion= 'Agregar';
+  listarTarjeta : any[] = []; //array para guardar las tarjetas
+  accion= 'Agregar'; //variable a utilizar para que cambie el titulo dependiendo de la accion
 
-  form: FormGroup;
+  form: FormGroup; //variable a utilizar para el formulario
   id: number | undefined;
 
   constructor(private fb: FormBuilder, private toastr: ToastrService, private _tarjetaService: TarjetaService) {
-    this.form = this.fb.group({
+    this.form = this.fb.group({ //validaciones que tendran los campos del formulario de tarjeta
       titular:['', Validators.required],
       numeroTarjeta:['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
       fechaExpiracion:['',[Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
@@ -31,68 +31,64 @@ export class TarjetaCreditoComponent implements OnInit {
 
   obtenerTarjetas(){
     this._tarjetaService.getListTarjetas().subscribe(data =>{
-      console.log(data);
+      console.log(data);    //traer los datos desde la API, para eso sirve el data
       this.listarTarjeta = data ;
     }, error => {
-      console.log(error);
+      console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
     });
 
   }
 
   guardarTarjeta(){
-    const tarjeta: any = {
-      titular:this.form.get('titular')?.value,
-      numeroTarjeta:this.form.get('numeroTarjeta')?.value,
-      fechaExpiracion:this.form.get('fechaExpiracion')?.value,
-      cvv:this.form.get('cvv')?.value,
-    }
+          const tarjeta: any = { //los datos ingresados en el formulario, guardarlos en su variable
+            titular:this.form.get('titular')?.value,
+            numeroTarjeta:this.form.get('numeroTarjeta')?.value,
+            fechaExpiracion:this.form.get('fechaExpiracion')?.value,
+            cvv:this.form.get('cvv')?.value,
+          }
 
-    if(this.id == undefined){
-      //Agregamos una tarjeta
-      this._tarjetaService.saveTarjeta(tarjeta).subscribe(data => {
-        this.toastr.success('La tarjeta fue registrada con éxito!', 'Tarjeta Registrada!');
-        this.obtenerTarjetas();
-        this.form.reset();
-      },error => {
-        this.toastr.error('Opss.. Ocurrio un problema al ejecutar!', 'Error!');
-        console.log(error);
-      });
-    }else{
-      //Editamos una tarjeta
-      tarjeta.id = this.id;
+          if(this.id == undefined){
+            //Agregamos una tarjeta
+            this._tarjetaService.saveTarjeta(tarjeta).subscribe(data => {
+              this.toastr.success('La tarjeta fue registrada con éxito!', 'Tarjeta Registrada!');
+              this.obtenerTarjetas();
+              this.form.reset();
+            },error => {
+              this.toastr.error('Opss.. Ocurrio un problema al ejecutar!', 'Error!');
+              console.log(error);
+            });
+          }else{
+            //Editamos una tarjeta
+            tarjeta.id = this.id;
 
-      this._tarjetaService.updateTarjeta(this.id,tarjeta).subscribe(data =>{
-        this.form.reset();
-        this.accion = 'Agregar';
-        this.id=undefined;
-        this.toastr.info('La tarjeta fue actualizada con exito', 'Tarjeta Actualizada');
-        this.obtenerTarjetas();
-      }, error => {
-        console.log(error);
-      })
-    }
-
-
-
-
+            this._tarjetaService.updateTarjeta(this.id,tarjeta).subscribe(data =>{
+              this.form.reset();
+              this.accion = 'Agregar'; //accion que va utilizar el titulo para cambiar de estado
+              this.id=undefined;
+              this.toastr.info('La tarjeta fue actualizada con exito', 'Tarjeta Actualizada');//si todo sale bien, muestra el mensaje
+              this.obtenerTarjetas();
+            }, error => {
+              console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
+            })
+          }
   }
 
   eliminarTarjeta(id: number){
-    this._tarjetaService.deleteTarjeta(id).subscribe(data => {
-      this.toastr.error('La tarjeta fue eliminada correctamente!', 'Eliminada!');
+    this._tarjetaService.deleteTarjeta(id).subscribe(data => { //eliminar una tarjeta en especifico
+      this.toastr.error('La tarjeta fue eliminada correctamente!', 'Eliminada!'); //si todo sale bien, muestra el mensaje
       this.obtenerTarjetas();
     }, error => {
-      console.log(error);
+      console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
     });
   }
 
 
   editarTarjeta(tarjeta: any){
-    this.accion = 'Editar';
+    this.accion = 'Editar'; //accion que va utilizar el titulo para cambiar de estado
     this.id = tarjeta.id;
 
     this.form.patchValue({
-      titular: tarjeta.titular,
+      titular: tarjeta.titular, //modificar y guardar los cambios que se realicen en lo ingresado en cada variable
       numeroTarjeta: tarjeta.numeroTarjeta,
       fechaExpiracion: tarjeta.fechaExpiracion,
       cvv: tarjeta.cvv
