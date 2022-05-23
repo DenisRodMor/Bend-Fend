@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class TarjetaService {
+export class TarjetaService { //de tipo privadas para que los componentes no la puedan ver
  private myAppUrl = 'https://localhost:44353/'; //URL de la app que fue creada en NET Core.
- private myApiUrl = 'api/tarjeta/';
+ private myApiUrl = 'api/tarjeta/'; //para acceder al controlador del Back-end, en este caso se llama Tarjeta
 
   constructor(private http: HttpClient) {}
 
