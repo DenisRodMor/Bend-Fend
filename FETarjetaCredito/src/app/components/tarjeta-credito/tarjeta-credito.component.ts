@@ -32,7 +32,7 @@ export class TarjetaCreditoComponent implements OnInit {
   obtenerTarjetas(){
     this._tarjetaService.getListTarjetas().subscribe(data =>{
       console.log(data);    //traer los datos desde la API, para eso sirve el data
-      this.listarTarjeta = data ;
+      this.listarTarjeta = data ; //traer los datos desde la BD y la API
     }, error => {
       console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
     });
@@ -51,8 +51,8 @@ export class TarjetaCreditoComponent implements OnInit {
             //Agregamos una tarjeta
             this._tarjetaService.saveTarjeta(tarjeta).subscribe(data => {
               this.toastr.success('La tarjeta fue registrada con éxito!', 'Tarjeta Registrada!'); //mostrar notificaciones de estado al usuario.
-              this.obtenerTarjetas();
-              this.form.reset();
+              this.obtenerTarjetas(); //llama al listado de las tarjetas luego de agregar
+              this.form.reset(); //resetear formulario al agregar la tarjeta
             },error => {
               this.toastr.error('Opss.. Ocurrio un problema al ejecutar!', 'Error!'); //mostrar notificaciones de estado al usuario.
               console.log(error);
@@ -62,11 +62,11 @@ export class TarjetaCreditoComponent implements OnInit {
             tarjeta.id = this.id;
 
             this._tarjetaService.updateTarjeta(this.id,tarjeta).subscribe(data =>{
-              this.form.reset();
+              this.form.reset(); //resetear formulario al actualizar la tarjeta
               this.accion = 'Agregar'; //accion que va utilizar el titulo para cambiar de estado
               this.id=undefined;
               this.toastr.info('La tarjeta fue actualizada con exito', 'Tarjeta Actualizada');//mostrar notificaciones de estado al usuario.
-              this.obtenerTarjetas();
+              this.obtenerTarjetas(); //llama al listado de las tarjetas luego de actualizar
             }, error => {
               console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
             })
@@ -76,7 +76,7 @@ export class TarjetaCreditoComponent implements OnInit {
   eliminarTarjeta(id: number){
     this._tarjetaService.deleteTarjeta(id).subscribe(data => { //eliminar una tarjeta en especifico
       this.toastr.error('La tarjeta fue eliminada correctamente!', 'Eliminada!'); //mostrar notificaciones de estado al usuario.
-      this.obtenerTarjetas();
+      this.obtenerTarjetas(); //llama al listado de las tarjetas luego de eliminar
     }, error => {
       console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
     });
