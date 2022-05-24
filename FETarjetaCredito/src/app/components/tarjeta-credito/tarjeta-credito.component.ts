@@ -50,11 +50,11 @@ export class TarjetaCreditoComponent implements OnInit {
           if(this.id == undefined){
             //Agregamos una tarjeta
             this._tarjetaService.saveTarjeta(tarjeta).subscribe(data => {
-              this.toastr.success('La tarjeta fue registrada con éxito!', 'Tarjeta Registrada!');
+              this.toastr.success('La tarjeta fue registrada con éxito!', 'Tarjeta Registrada!'); //mostrar notificaciones de estado al usuario.
               this.obtenerTarjetas();
               this.form.reset();
             },error => {
-              this.toastr.error('Opss.. Ocurrio un problema al ejecutar!', 'Error!');
+              this.toastr.error('Opss.. Ocurrio un problema al ejecutar!', 'Error!'); //mostrar notificaciones de estado al usuario.
               console.log(error);
             });
           }else{
@@ -65,7 +65,7 @@ export class TarjetaCreditoComponent implements OnInit {
               this.form.reset();
               this.accion = 'Agregar'; //accion que va utilizar el titulo para cambiar de estado
               this.id=undefined;
-              this.toastr.info('La tarjeta fue actualizada con exito', 'Tarjeta Actualizada');//si todo sale bien, muestra el mensaje
+              this.toastr.info('La tarjeta fue actualizada con exito', 'Tarjeta Actualizada');//mostrar notificaciones de estado al usuario.
               this.obtenerTarjetas();
             }, error => {
               console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
@@ -75,7 +75,7 @@ export class TarjetaCreditoComponent implements OnInit {
 
   eliminarTarjeta(id: number){
     this._tarjetaService.deleteTarjeta(id).subscribe(data => { //eliminar una tarjeta en especifico
-      this.toastr.error('La tarjeta fue eliminada correctamente!', 'Eliminada!'); //si todo sale bien, muestra el mensaje
+      this.toastr.error('La tarjeta fue eliminada correctamente!', 'Eliminada!'); //mostrar notificaciones de estado al usuario.
       this.obtenerTarjetas();
     }, error => {
       console.log(error); //si hubo algun error, muestra mensaje de que algo sucedio
